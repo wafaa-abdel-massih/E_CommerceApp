@@ -1,9 +1,6 @@
 package StepDefinition;
 
-import ElementLocator.CurrenciesLocator;
-import ElementLocator.RegisterLocator;
-import ElementLocator.ResetPasswordLocator;
-import ElementLocator.SearchProductLocator;
+import ElementLocator.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -14,11 +11,14 @@ import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+
+import java.util.Random;
 
 public class StepDefinitions {
 
     WebDriver driver;
-    RegisterLocator locator = new RegisterLocator();;
+    RegisterLocator locator = new RegisterLocator();
     String projectDir = System.getProperty("user.dir");
     String chromeDriverPath = projectDir + "\\src\\main\\resources\\chromedriver.exe";
 
@@ -138,11 +138,63 @@ public class StepDefinitions {
         Assert.assertTrue(locatorSC.euroSign(driver).getText().contains("€"));
     }
 
+
+    //////////////////////////////////////////////////////////////////////////
+    // Select Random Categories Scenario
+
+    SelectCategoryLocator locatorSRC = new SelectCategoryLocator();
+    Random random = new Random();
+    int randomCategory, randomSubCategory;
+    boolean sub;
+    @Given("open website")
+    public void openWebsite() {
+        driver.navigate().to("https://demo.nopcommerce.com/");
+        driver.manage().window().maximize();
+    }
+
+    @And("hover on random selected category")
+    public void hoverOnRandomSelectedCategory() {
+
+        int max = 7;
+        randomCategory = random.nextInt(max);
+
+        Actions builder = new Actions(driver);
+
+        builder.moveToElement(locatorSRC.mainCategories(driver).get(randomCategory)).build().perform();
+    }
+
+    @And("sub category should be displayed if found")
+    public void subCategoryShouldBeDisplayedIfFound() {
+        if (randomCategory != 0 && randomCategory != 1 && randomCategory != 2){
+            locatorSRC.mainCategories(driver).get(randomCategory).click();
+            sub = false;
+        }
+        else {
+            sub = true;
+            int subMax = 3;
+            randomSubCategory = random.nextInt(subMax);
+            locatorSRC.subCategories(driver, randomCategory+1, randomSubCategory+1).click();
+        }
+    }
+
+    @Then("user could select category")
+    public void userCouldSelectCategory() {
+        String categoryName;
+        if (sub) {
+            categoryName = locatorSRC.subCategories(driver, randomCategory + 1, randomSubCategory + 1).getText();
+        }
+        else {
+            categoryName = locatorSRC.mainCategories(driver).get(randomCategory).getText();
+        }
+        Assert.assertTrue(driver.getCurrentUrl().contains(categoryName));
+    }
+
+
     //////////////////////////////////////////////////////////////////////////
 
     @After
     public void closeBrowser() throws InterruptedException {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
         driver.quit();
     }
 }

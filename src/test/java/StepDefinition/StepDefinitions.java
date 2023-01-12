@@ -1,7 +1,9 @@
 package StepDefinition;
 
+import ElementLocator.CurrenciesLocator;
 import ElementLocator.RegisterLocator;
 import ElementLocator.ResetPasswordLocator;
+import ElementLocator.SearchProductLocator;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -25,6 +27,9 @@ public class StepDefinitions {
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         driver= new ChromeDriver();
     }
+
+    //////////////////////////////////////////////////////////////////////////
+    // Register Scenario
 
     @Given("user navigates to register page")
     public void registerPage(){
@@ -50,15 +55,10 @@ public class StepDefinitions {
         Assert.assertTrue(locator.registerMessage(driver).getText().contains("Your registration completed"));
     }
 
-    @After
-    public void closeBrowser() throws InterruptedException {
-        Thread.sleep(3000);
-        driver.quit();
-    }
-
 
     //////////////////////////////////////////////////////////////////////////
     // Login Scenario
+
     @Given("user navigates to login page")
     public void loginPage() {
         driver.navigate().to("https://demo.nopcommerce.com/login?returnUrl=%2F");
@@ -101,5 +101,48 @@ public class StepDefinitions {
     public void resetSuccessfully(){
         String expectedMessage = "Email with instructions has been sent to you.";
         Assert.assertTrue(locatorRP.resetMessage(driver).getText().contains(expectedMessage));
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////
+    // Search Product Scenario
+
+    SearchProductLocator locatorSP = new SearchProductLocator();
+    @And("user enter product name in search box")
+    public void searchProduct() { locatorSP.searchBox(driver).sendKeys("Bracelet"); }
+
+    @And("user click on search button")
+    public void searchButton() throws InterruptedException {
+        locatorSP.searchBox(driver).sendKeys(Keys.ENTER);
+        Thread.sleep(2000);
+    }
+
+    @Then("searched product should be displayed")
+    public void searchedProduct() {
+        Assert.assertTrue(locatorSP.productTitle(driver).getText().contains("Bracelet"));
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////
+    // Switch Currencies Scenario
+
+    CurrenciesLocator locatorSC = new CurrenciesLocator();
+    @And("user selected US-EURO")
+    public void euroSelected() {
+        locatorSC.currenciesOptions(driver).click();
+        locatorSC.euroOption(driver).click();
+    }
+
+    @Then("€ sign should be displayed next to price")
+    public void euroSign() {
+        Assert.assertTrue(locatorSC.euroSign(driver).getText().contains("€"));
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
+    @After
+    public void closeBrowser() throws InterruptedException {
+        Thread.sleep(3000);
+        driver.quit();
     }
 }

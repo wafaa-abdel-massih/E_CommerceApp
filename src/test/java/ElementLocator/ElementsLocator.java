@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class RegisterLocator {
+public class ElementsLocator {
 
     public WebElement firstNameField(WebDriver driver){
         return driver.findElement(By.id("FirstName"));
@@ -28,5 +28,17 @@ public class RegisterLocator {
 
     public WebElement registerMessage(WebDriver driver){
         return driver.findElement(By.className("result"));
+    }
+
+    public WebElement forgetPasswordLink(WebDriver driver){
+        return driver.findElement(By.cssSelector("div.inputs.reversed>span>a"));
+    }
+
+    public WebElement resetMessage(WebDriver driver){
+        return driver.findElement(By.className("content"));
+    }
+
+    public WebElement recoverButton(WebDriver driver){
+        return driver.findElement(By.name("send-email"));
     }
 }

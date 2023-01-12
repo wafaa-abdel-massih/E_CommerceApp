@@ -146,10 +146,14 @@ public class StepDefinitions {
     Random random = new Random();
     int randomCategory, randomSubCategory;
     boolean sub;
-    @Given("open website")
-    public void openWebsite() {
-        driver.navigate().to("https://demo.nopcommerce.com/");
-        driver.manage().window().maximize();
+
+    @Given("user logged successfully")
+    public void userLogged() {
+        loginPage();         //driver.navigate().to("https://demo.nopcommerce.com/login?returnUrl=%2F");
+        validEmail();        //locator.emailField(driver).sendKeys("test@gmail.com");
+        validPassword();     //locator.passwordField(driver).sendKeys("test123");
+        loginButton();       //locator.passwordField(driver).sendKeys(Keys.ENTER);
+        loginSuccessfully(); //Assert.assertEquals(driver.getCurrentUrl(),"https://demo.nopcommerce.com/");
     }
 
     @And("hover on random selected category")

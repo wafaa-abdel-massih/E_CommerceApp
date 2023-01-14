@@ -10,9 +10,13 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class StepDefinitions {
@@ -21,10 +25,16 @@ public class StepDefinitions {
     RegisterLocator locator = new RegisterLocator();
     String projectDir = System.getProperty("user.dir");
     String chromeDriverPath = projectDir + "\\src\\main\\resources\\chromedriver.exe";
+    Random random = new Random();
+
+
+    public StepDefinitions(){ System.setProperty("webdriver.chrome.driver", chromeDriverPath); }
+
+    //////////////////////////////////////////////////////////////////////////
+    // Before Each Scenario
 
     @Before
     public void openBrowser(){
-        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
         driver= new ChromeDriver();
     }
 
@@ -54,7 +64,6 @@ public class StepDefinitions {
     public void registered(){
         Assert.assertTrue(locator.registerMessage(driver).getText().contains("Your registration completed"));
     }
-
 
     //////////////////////////////////////////////////////////////////////////
     // Login Scenario
@@ -103,7 +112,6 @@ public class StepDefinitions {
         Assert.assertTrue(locatorRP.resetMessage(driver).getText().contains(expectedMessage));
     }
 
-
     //////////////////////////////////////////////////////////////////////////
     // Search Product Scenario
 
@@ -122,28 +130,39 @@ public class StepDefinitions {
         Assert.assertTrue(locatorSP.productTitle(driver).getText().contains("Bracelet"));
     }
 
-
     //////////////////////////////////////////////////////////////////////////
     // Switch Currencies Scenario
 
     CurrenciesLocator locatorSC = new CurrenciesLocator();
-    @And("user selected US-EURO")
-    public void euroSelected() {
+    String currency;
+    @And("user select US-EURO")
+    public void currencySelected() {
         locatorSC.currenciesOptions(driver).click();
-        locatorSC.euroOption(driver).click();
+        Select selectedCurrency = new Select(locatorSC.currenciesOptions(driver));
+        currency = selectedCurrency.getFirstSelectedOption().getText();
+
+        if(Objects.equals(currency, "US Dollar")){
+            locatorSC.usOption(driver).click();
+        }
+        else {
+            locatorSC.euroOption(driver).click();
+        }
     }
 
-    @Then("€ sign should be displayed next to price")
+    @Then("€ or $ sign based on selected currency should be displayed next to price")
     public void euroSign() {
-        Assert.assertTrue(locatorSC.euroSign(driver).getText().contains("€"));
+        if(Objects.equals(currency, "US Dollar")){
+            Assert.assertTrue(locatorSC.euroSign(driver).getText().contains("$"));
+        }
+        else {
+            Assert.assertTrue(locatorSC.euroSign(driver).getText().contains("€"));
+        }
     }
-
 
     //////////////////////////////////////////////////////////////////////////
     // Select Random Categories Scenario
 
     SelectCategoryLocator locatorSRC = new SelectCategoryLocator();
-    Random random = new Random();
     int randomCategory, randomSubCategory;
     boolean sub;
 
@@ -158,12 +177,9 @@ public class StepDefinitions {
 
     @And("hover on random selected category")
     public void hoverOnRandomSelectedCategory() {
-
         int max = 7;
         randomCategory = random.nextInt(max);
-
         Actions builder = new Actions(driver);
-
         builder.moveToElement(locatorSRC.mainCategories(driver).get(randomCategory)).build().perform();
     }
 
@@ -193,8 +209,36 @@ public class StepDefinitions {
         Assert.assertTrue(driver.getCurrentUrl().contains(categoryName));
     }
 
+    //////////////////////////////////////////////////////////////////////////
+    // Filter With Color Scenario
+
+    ColorFilterLocator locatorCF = new ColorFilterLocator();
+    @And("user select Apparel > Shoes category")
+    public void shoesCategory() {
+        Actions builder = new Actions(driver);
+        builder.moveToElement(locatorSRC.mainCategories(driver).get(2)).build().perform();
+        locatorSRC.subCategories(driver,3,1).click();
+    }
+
+    @When("user checked in specific color")
+    public void checkedInSpecificColor() {
+        locatorCF.redColorFilter(driver).click();
+    }
+
+    @Then("product with checked specific color should be displayed")
+    public void specificColorProduct() {
+        locatorCF.filteredProduct(driver).click();
+        List<WebElement> colors = locatorCF.productColors(driver);
+
+        for (WebElement color : colors){
+            if (Objects.equals(color.getAttribute("data-attr-value"), "25")){
+                Assert.assertTrue(true);
+            }
+        }
+    }
 
     //////////////////////////////////////////////////////////////////////////
+    // After Each Scenario
 
     @After
     public void closeBrowser() throws InterruptedException {

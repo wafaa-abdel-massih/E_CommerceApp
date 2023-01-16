@@ -50,7 +50,7 @@ public class StepDefinitions {
     public void validData(){
         locator.firstNameField(driver).sendKeys("wafaa");
         locator.lastNameField(driver).sendKeys("habib");
-        locator.emailField(driver).sendKeys("test@gmail.com");
+        locator.emailField(driver).sendKeys("testing@gmail.com");
         locator.passwordField(driver).sendKeys("test123");
         locator.confirmPasswordField(driver).sendKeys("test123");
     }
@@ -74,7 +74,7 @@ public class StepDefinitions {
     }
 
     @When("user enter valid email")
-    public void validEmail() { locator.emailField(driver).sendKeys("test@gmail.com"); }
+    public void validEmail() { locator.emailField(driver).sendKeys("testing@gmail.com"); }
 
     @And("user enter valid password")
     public void validPassword(){
@@ -169,7 +169,7 @@ public class StepDefinitions {
     @Given("user logged successfully")
     public void userLogged() {
         loginPage();         //driver.navigate().to("https://demo.nopcommerce.com/login?returnUrl=%2F");
-        validEmail();        //locator.emailField(driver).sendKeys("test@gmail.com");
+        validEmail();        //locator.emailField(driver).sendKeys("testing@gmail.com");
         validPassword();     //locator.passwordField(driver).sendKeys("test123");
         loginButton();       //locator.passwordField(driver).sendKeys(Keys.ENTER);
         loginSuccessfully(); //Assert.assertEquals(driver.getCurrentUrl(),"https://demo.nopcommerce.com/");
@@ -193,6 +193,7 @@ public class StepDefinitions {
             sub = true;
             int subMax = 3;
             randomSubCategory = random.nextInt(subMax);
+            //Thread.sleep(1000);
             locatorSRC.subCategories(driver, randomCategory+1, randomSubCategory+1).click();
         }
     }
@@ -201,11 +202,14 @@ public class StepDefinitions {
     public void userCouldSelectCategory() {
         String categoryName;
         if (sub) {
+            //Thread.sleep(1000);
             categoryName = locatorSRC.subCategories(driver, randomCategory + 1, randomSubCategory + 1).getText();
         }
         else {
             categoryName = locatorSRC.mainCategories(driver).get(randomCategory).getText();
         }
+        categoryName = categoryName.replace(' ','-').toLowerCase();
+
         Assert.assertTrue(driver.getCurrentUrl().contains(categoryName));
     }
 
@@ -217,6 +221,7 @@ public class StepDefinitions {
     public void shoesCategory() {
         Actions builder = new Actions(driver);
         builder.moveToElement(locatorSRC.mainCategories(driver).get(2)).build().perform();
+        //Thread.sleep(1000);
         locatorSRC.subCategories(driver,3,1).click();
     }
 
@@ -273,6 +278,7 @@ public class StepDefinitions {
     public void selectCategory() {
         Actions builder = new Actions(driver);
         builder.moveToElement(locatorSRC.mainCategories(driver).get(2)).build().perform();
+        //Thread.sleep(1000);
         locatorSRC.subCategories(driver, 3, 3).click();
     }
 
@@ -294,8 +300,10 @@ public class StepDefinitions {
     }
 
     @And("user select another category")
-    public void selectCategoryAgain() {
+    public void selectCategoryAgain() throws InterruptedException {
         Actions builder = new Actions(driver);
+        builder.sendKeys(Keys.PAGE_UP).build().perform();
+        Thread.sleep(2000);
         builder.moveToElement(locatorSRC.mainCategories(driver).get(0)).build().perform();
         locatorSRC.subCategories(driver, 1, 2).click();
     }
@@ -364,7 +372,7 @@ public class StepDefinitions {
         locatorSO.billingLastName(driver).clear();
         locatorSO.billingLastName(driver).sendKeys("habib");
         locatorSO.billingEmail(driver).clear();
-        locatorSO.billingEmail(driver).sendKeys("test@gmail.com");
+        locatorSO.billingEmail(driver).sendKeys("testing@gmail.com");
         locatorSO.billingCountry(driver).click();
         locatorSO.billingCountryOption(driver).click();
         Thread.sleep(1000);
@@ -414,7 +422,7 @@ public class StepDefinitions {
 
     @After
     public void closeBrowser() throws InterruptedException {
-        Thread.sleep(3000);
+        Thread.sleep(2000);
         driver.quit();
     }
 }

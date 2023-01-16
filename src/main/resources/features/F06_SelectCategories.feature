@@ -6,3 +6,7 @@ Feature: Logged user could select different Categories
     And hover on random selected category
     And sub category should be displayed if found
     Then user could select category
+    And hover on random selected category
+    And sub category should be displayed if found
+    Then user could select category
+

@@ -50,7 +50,7 @@ public class StepDefinitions {
     public void validData(){
         locator.firstNameField(driver).sendKeys("wafaa");
         locator.lastNameField(driver).sendKeys("habib");
-        locator.emailField(driver).sendKeys("testing@gmail.com");
+        locator.emailField(driver).sendKeys("test@gmail.com");
         locator.passwordField(driver).sendKeys("test123");
         locator.confirmPasswordField(driver).sendKeys("test123");
     }
@@ -74,7 +74,7 @@ public class StepDefinitions {
     }
 
     @When("user enter valid email")
-    public void validEmail() { locator.emailField(driver).sendKeys("testing@gmail.com"); }
+    public void validEmail() { locator.emailField(driver).sendKeys("test@gmail.com"); }
 
     @And("user enter valid password")
     public void validPassword(){
@@ -169,7 +169,7 @@ public class StepDefinitions {
     @Given("user logged successfully")
     public void userLogged() {
         loginPage();         //driver.navigate().to("https://demo.nopcommerce.com/login?returnUrl=%2F");
-        validEmail();        //locator.emailField(driver).sendKeys("testing@gmail.com");
+        validEmail();        //locator.emailField(driver).sendKeys("test@gmail.com");
         validPassword();     //locator.passwordField(driver).sendKeys("test123");
         loginButton();       //locator.passwordField(driver).sendKeys(Keys.ENTER);
         loginSuccessfully(); //Assert.assertEquals(driver.getCurrentUrl(),"https://demo.nopcommerce.com/");
@@ -372,7 +372,7 @@ public class StepDefinitions {
         locatorSO.billingLastName(driver).clear();
         locatorSO.billingLastName(driver).sendKeys("habib");
         locatorSO.billingEmail(driver).clear();
-        locatorSO.billingEmail(driver).sendKeys("testing@gmail.com");
+        locatorSO.billingEmail(driver).sendKeys("test@gmail.com");
         locatorSO.billingCountry(driver).click();
         locatorSO.billingCountryOption(driver).click();
         Thread.sleep(1000);

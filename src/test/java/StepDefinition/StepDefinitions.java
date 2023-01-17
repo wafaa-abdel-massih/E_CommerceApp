@@ -1,8 +1,6 @@
 package StepDefinition;
 
 import ElementLocator.*;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,10 +9,8 @@ import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -23,20 +19,10 @@ public class StepDefinitions {
 
     WebDriver driver;
     RegisterLocator locator = new RegisterLocator();
-    String projectDir = System.getProperty("user.dir");
-    String chromeDriverPath = projectDir + "\\src\\main\\resources\\chromedriver.exe";
     Random random = new Random();
+    Hooks hook = new Hooks();
 
-    public StepDefinitions(){ System.setProperty("webdriver.chrome.driver", chromeDriverPath); }
-
-    //////////////////////////////////////////////////////////////////////////
-    // Before Each Scenario
-
-    @Before
-    public void openBrowser(){
-        driver= new ChromeDriver();
-        driver.manage().window().maximize();
-    }
+    public StepDefinitions(){ this.driver = hook.getDriver(); }
 
     //////////////////////////////////////////////////////////////////////////
     // Register Scenario
@@ -415,14 +401,5 @@ public class StepDefinitions {
     public void aConfirmMessageShouldBeDisplayed() throws InterruptedException {
         Thread.sleep(2000);
         Assert.assertTrue(locatorSO.confirmMessage(driver).getText().contains("Your order has been successfully processed!"));
-    }
-
-    //////////////////////////////////////////////////////////////////////////
-    // After Each Scenario
-
-    @After
-    public void closeBrowser() throws InterruptedException {
-        Thread.sleep(2000);
-        driver.quit();
     }
 }

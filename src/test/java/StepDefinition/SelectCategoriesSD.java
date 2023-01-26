@@ -21,7 +21,7 @@ public class SelectCategoriesSD {
     @Given("user logged successfully")
     public void userLogged() {
         login.loginPage();         //driver.navigate().to("https://demo.nopcommerce.com/login?returnUrl=%2F");
-        login.validEmail();        //locator.emailField(driver).sendKeys("test@gmail.com");
+        login.validEmail();        //locator.emailField(driver).sendKeys("testing@gmail.com");
         login.validPassword();     //locator.passwordField(driver).sendKeys("test123");
         login.loginButton();       //locator.passwordField(driver).sendKeys(Keys.ENTER);
         login.loginSuccessfully(); //Assert.assertEquals(driver.getCurrentUrl(),"https://demo.nopcommerce.com/");

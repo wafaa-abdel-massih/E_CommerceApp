@@ -13,7 +13,6 @@ public class SuccessfulOrderSD {
     @And("user go to cart")
     public void userGoToCart() {
         locatorSO.shoppingCartButton(driver).click();
-
     }
 
     @And("user agree terms")

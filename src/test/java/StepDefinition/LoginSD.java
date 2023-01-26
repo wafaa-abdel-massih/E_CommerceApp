@@ -19,7 +19,7 @@ public class LoginSD {
     }
 
     @When("user enter valid email")
-    public void validEmail() { locator.emailField(driver).sendKeys("test@gmail.com"); }
+    public void validEmail() { locator.emailField(driver).sendKeys("testing@gmail.com"); }
 
     @And("user enter valid password")
     public void validPassword(){

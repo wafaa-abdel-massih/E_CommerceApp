@@ -8,7 +8,7 @@ Feature: Create successful Order
     When user click on add to cart
     And user go to cart
     And user agree terms
-    And  click on checkout
+    And click on checkout
     And user fill billing address required data
     And user choose shipping method
     And user choose payment method

@@ -23,7 +23,7 @@ public class RegisterSD {
     public void validData(){
         locator.firstNameField(driver).sendKeys("wafaa");
         locator.lastNameField(driver).sendKeys("habib");
-        locator.emailField(driver).sendKeys("test@gmail.com");
+        locator.emailField(driver).sendKeys("testing@gmail.com");
         locator.passwordField(driver).sendKeys("test123");
         locator.confirmPasswordField(driver).sendKeys("test123");
     }

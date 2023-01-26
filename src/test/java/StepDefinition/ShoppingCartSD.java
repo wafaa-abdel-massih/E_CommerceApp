@@ -13,13 +13,12 @@ import org.openqa.selenium.interactions.Actions;
 public class ShoppingCartSD {
 
     ShoppingLocator locatorS = new ShoppingLocator();
-    private SelectCategoryLocator locatorSRC;
+    SelectCategoryLocator locatorSRC = new SelectCategoryLocator();
 
     @And("user select category")
     public void selectCategory() {
         Actions builder = new Actions(driver);
         builder.moveToElement(locatorSRC.mainCategories(driver).get(2)).build().perform();
-        //Thread.sleep(1000);
         locatorSRC.subCategories(driver, 3, 3).click();
     }
 
